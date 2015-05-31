@@ -32,7 +32,20 @@ namespace zex
 			// content
 			if (head.success)
 			{
-				out = "<html><div>reeeesp yeaaaahhhh</div><form action='/form'><input type='text' name='inp1' value='vvvvv1'/><input type='submit' value='go' /></form></html>";
+				out = "<html><head><title>zesap site</title></head>";
+				out += "<style>a{padding:8px;}</style>";
+				out += "<body>";
+
+				if (prms.url == "/docs")
+					out += "<div>mega docs<ul><li>111</li><li>222</li><li>333</li></ul></div><div><a href='/'>home</a><a href='about'>about</a>";
+				else if (prms.url == "/about")
+					out += "<div><p>this is... aaaaaa</p><p>is a super site.. yeahhh</p></div><div><a href='/'>home</a><a href='docs'>docs</a></div>";
+				else
+					out += "<div>reeeesp yeaaaahhhh</div><form action='/form'><input type='text' name='inp1' value='vvvvv1'/><input type='submit' value='go' /></form><a href='docs'>docs</a>";
+
+
+
+				out += "</body></html>";
 			}
 			return head;
 		}
