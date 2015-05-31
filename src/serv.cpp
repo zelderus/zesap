@@ -6,6 +6,7 @@
 #include <unistd.h>
 #include <sys/types.h>
 #include <sys/socket.h>
+#include <sys/un.h>
 #include <netinet/in.h>
 #include <errno.h>
 #include <arpa/inet.h>
@@ -22,11 +23,11 @@ namespace zex
 {
 
 	// TODO: to config
-	int zex_port = 3542;
-	char zex_addr[] = "127.0.0.1";
+	char zesap_socket[] = "tmp/zesap.sock";
 
 
-	static int serv_stopped = 0; 
+	static int serv_stopped = 0;
+	int zesap_ret = 0;
 	int serv_child = 0;
 	int sock = 0;
 	int listener = 0;
@@ -46,9 +47,8 @@ namespace zex
 		{
 			pl("\nsignal:");
 			pd(signum);
-
 			close(listener);
-			serv_stopped = 1;	//- flag to stop main proccess
+			serv_stopped = 1;		//- flag to stop main proccess
 		}
 	}
 
@@ -75,21 +75,20 @@ namespace zex
 	int 
 	zex_serv(void)
 	{
-		struct sockaddr_in addr;
+		struct sockaddr_un addr;
 		int pid;
 		struct sigaction sa;
 
 		// сокет для прослушки порта
-		listener = socket(AF_INET, SOCK_STREAM, 0);
+		listener = socket(AF_UNIX, SOCK_STREAM, 0);	// SOCK_DGRAM
 		if (listener < 0)
 		{
 			p("serv err: socket");
 			return 1;
 		}
 		// подключаемся на адрес для прослушки
-		addr.sin_family = AF_INET;
-		addr.sin_port = htons(zex_port);
-		addr.sin_addr.s_addr = inet_addr(zex_addr); // htonl(INADDR_ANY);
+		addr.sun_family = AF_UNIX;
+		strncpy(addr.sun_path, zesap_socket, sizeof(addr.sun_path)-1);
 		if (bind(listener, (struct sockaddr*)&addr, sizeof(addr)) < 0)
 		{
 			p("serv err: bind");
@@ -98,10 +97,9 @@ namespace zex
 		}
 
 		// console
-		pl("address: ");
-		pl(zex_addr);
-		pl(":");
-		pd(zex_port);
+		pl("socket: ");
+		pl(zesap_socket);
+		p("");
 
 		listen(listener, 1);
 		p("---------------------------");
@@ -131,13 +129,14 @@ namespace zex
 				}
 				pl("serv err: accept -> "); 
 				p(strerror(errno)); 
-				return 3;
+				zesap_ret = 3;
+				break;
 			}
 			//+ создание нового процесса с полной обработкой запроса
 			//- способ с новым процессом
 			//- альтернатива этому: применение select+poll или потоков
 			pid = fork();
-			if (pid < 0) { p("serv err: fork"); return 4; }
+			if (pid < 0) { p("serv err: fork"); zesap_ret = 4; break; }
 
 			if (pid == 0) /* client proccess  */
 			{
@@ -151,7 +150,9 @@ namespace zex
 				close(sock);
 			}
 		}
-		return 0;
+
+		unlink(zesap_socket);	//- delete socket file
+		return zesap_ret;
 	}
 
 	//

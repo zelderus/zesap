@@ -61,6 +61,9 @@ namespace zex
 	{
 		ZexResp resp;
 		string& response = outstr;	
+
+//response = "zesap response";
+
 		// request content
 		string resp_content = "";
 		ZexRespHead head = responser::check_request(resp_content, prms);

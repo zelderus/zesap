@@ -1,11 +1,14 @@
 # Makefile for zex
 
 
-hello: bin types.o zesap.o responser.o serv.o help.o
+hello: bin tmp types.o zesap.o responser.o serv.o help.o
 	g++ -o bin/zesap bin/zesap.o bin/types.o bin/responser.o bin/serv.o bin/help.o
 
 bin: 
 	mkdir bin
+
+tmp:
+	mkdir tmp
 
 zesap.o: src/zesap.cpp
 	g++ -c src/zesap.cpp -o bin/zesap.o -lstdc++
