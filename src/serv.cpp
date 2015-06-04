@@ -24,7 +24,7 @@ namespace zex
 
 	// TODO: to config
 	char zesap_socket[] = "tmp/zesap.sock";
-
+	std::string app = "../zesir/zesir.rb";
 
 	static int serv_stopped = 0;
 	int zesap_ret = 0;
@@ -86,6 +86,8 @@ namespace zex
 			p("serv err: socket");
 			return 1;
 		}
+		// unlink socket
+		unlink(zesap_socket);
 		// подключаемся на адрес для прослушки
 		addr.sun_family = AF_UNIX;
 		strncpy(addr.sun_path, zesap_socket, sizeof(addr.sun_path)-1);
@@ -141,8 +143,11 @@ namespace zex
 			if (pid == 0) /* client proccess  */
 			{
 				serv_child = 1;
-				close(listener);		//- у нового процесса продублировались дескрипторы
-				zex_serv_child(sock);		//- основная функция обработки
+				close(listener);			//- у нового процесса продублировались дескрипторы
+				int cr = 0;				
+				//cr = zex_serv_child(sock);		//- основная функция обработки
+				cr = zex_serv_exec(sock);
+				exit(cr);
 				return ZEX_RET_FRMCLIENT;	//- exit in client proccess
 			}
 			else
@@ -154,6 +159,27 @@ namespace zex
 		unlink(zesap_socket);	//- delete socket file
 		return zesap_ret;
 	}
+
+
+
+	//
+	// run ruby script
+	//
+	int zex_serv_exec(int sock)
+	{
+		errno = 0;
+		int exi = execlp("ruby", " ", app.c_str(), inttostr(sock).c_str(), NULL);
+		if (exi < 0)
+		{
+			pl("execlp: ");
+			p(strerror(errno));
+			close(sock);
+			return 1;
+		}
+		return 0;
+	}
+
+
 
 	//
 	// отдельный процесс. чтение запроса и ответ

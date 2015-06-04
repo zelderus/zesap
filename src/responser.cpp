@@ -76,7 +76,7 @@ namespace zex
 		string& response = outstr;	
 
 //response = "zesap response";
-
+//sleep(10);
 		// request content
 		string resp_content = "";
 		ZexRespHead head = responser::check_request(resp_content, prms);

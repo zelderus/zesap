@@ -20,7 +20,7 @@ int main()
 		p("zesap: err");
 		return 1;
 	}
-	else if (zs == ZEX_RET_FRMCLIENT)	/* client proccess end */
+	else if (zs == ZEX_RET_FRMCLIENT)	/* client proccess end, deprecated */
 	{
 		exit(0);
 		return 0;
