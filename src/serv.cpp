@@ -24,7 +24,7 @@ namespace zex
 
 	// TODO: to config
 	char zesap_socket[] = "tmp/zesap.sock";
-	std::string app = "../zesir/zesir.rb";
+	std::string app = "/home/zelder/cc/zesir/app/zesir.rb";
 
 	static int serv_stopped = 0;
 	int zesap_ret = 0;
