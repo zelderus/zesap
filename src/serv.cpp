@@ -24,7 +24,14 @@ namespace zex
 
 	// TODO: to config
 	char zesap_socket[] = "tmp/zesap.sock";
-	std::string app = "/home/zelder/cc/zesir/app/zesir.rb";
+	
+	//std::string appRun = "ruby";
+	//std::string app = "/home/zelder/Projects/Zexes/zesir/app/zesir.rb";
+	
+	std::string appRun = "python3";
+	std::string app = "/home/zelder/Projects/Zexes/pytsite/App/main.py";
+
+
 
 	static int serv_stopped = 0;
 	int zesap_ret = 0;
@@ -168,7 +175,7 @@ namespace zex
 	int zex_serv_exec(int sock)
 	{
 		errno = 0;
-		int exi = execlp("ruby", " ", app.c_str(), inttostr(sock).c_str(), NULL);
+		int exi = execlp(appRun.c_str(), " ", app.c_str(), inttostr(sock).c_str(), NULL);
 		if (exi < 0)
 		{
 			pl("execlp: ");
