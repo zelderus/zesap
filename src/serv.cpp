@@ -28,6 +28,7 @@ namespace zex
 	//std::string appRun = "ruby";
 	//std::string app = "/home/zelder/Projects/Zexes/zesir/app/zesir.rb";
 	
+	// TODO: to args
 	std::string appRun = "python3";
 	std::string app = "/home/zelder/Projects/Zexes/pytsite/App/main.py";
 
