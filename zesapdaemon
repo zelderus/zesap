@@ -10,13 +10,12 @@
 ### END INIT INFO
 
 PATH=/bin:/usr/bin:/sbin:/usr/sbin
-. /lib/lsb/init-functions
 #ZESAPPATH="/usr/sbin/zesap"
 ZESAPPATH="/home/zelder/Projects/Zexes/zesap/bin/zesap"
 
 case "$1" in
   start)
-    log_daemon_msg "Starting zesap cron" "zesap"
+    echo "Starting zesap cron" "zesap"
     start-stop-daemon --start --exec $ZESAPPATH
     log_end_msg 0
     ;;
@@ -25,7 +24,7 @@ case "$1" in
     :
     ;;
   stop)
-    log_daemon_msg "Stopping zesap cron" "zesap"
+    echo "Stopping zesap cron" "zesap"
     start-stop-daemon --stop --exec $ZESAPPATH
     log_end_msg 0
     ;;
