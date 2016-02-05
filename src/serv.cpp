@@ -23,7 +23,7 @@ namespace zex
 {
 
 	// TODO: to config
-	char zesap_socket[] = "tmp/zesap.sock";
+	char zesap_socket[] = "/var/tmp/zesap.sock";
 	
 	//std::string appRun = "ruby";
 	//std::string app = "/home/zelder/Projects/Zexes/zesir/app/zesir.rb";
